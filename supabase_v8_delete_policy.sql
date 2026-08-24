@@ -1,4 +1,4 @@
--- Execute once in Supabase SQL Editor to enable “↩ Desfazer”.
+-- Agenda CLOT V8: permite o botão “↩ Desfazer”.
 grant delete on table public.producao to anon;
 
 create policy "Agenda CLOT - desfazer"
