@@ -463,6 +463,17 @@
       background: var(--blue-light);
     }
 
+    .done-btn:disabled {
+      cursor: default;
+      opacity: .75;
+    }
+    .done-btn.inactive {
+      border-color: #e2e8f0;
+      color: #94a3b8;
+      background: #f8fafc;
+      cursor: default;
+    }
+
     .done-btn.done {
       background: var(--green-light);
       border-color: #A8C993;
@@ -1690,8 +1701,12 @@
     CLOT • Agenda Produtiva • Versão inicial
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
 
+    const SUPABASE_URL = "https://klxigkpmqwpsioanlpzs.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_7A4hFVjYCkIq2rYFLCrRrQ_AF6hzrWt";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     function showPerson(id) {
       document.querySelectorAll(".agenda-view, .person-view").forEach(el => el.classList.remove("active"));
@@ -1713,13 +1728,111 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function toggleDone(button) {
-      button.classList.toggle("done");
-      if (button.classList.contains("done")) {
-        button.textContent = "✓ Já fiz";
-      } else {
-        button.textContent = "☐ Eu já fiz";
+    function parseTask(taskText) {
+      const text = taskText.trim();
+      const match = text.match(/(\d+(?:[.,]\d+)?)\s*(PAL|CX|KIT)/i);
+      const quantidade = match ? Number(match[1].replace(',', '.')) : null;
+      const unidade = match ? match[2].toUpperCase() : null;
+      let atividade = text;
+      if (/etiquetagem/i.test(text)) atividade = unidade === 'CX' ? 'Etiquetagem de caixas' : 'Etiquetagem';
+      else if (/TAMP/i.test(text)) atividade = 'Tampar frascos';
+      else if (/ENV/i.test(text)) atividade = 'Envase + batoque';
+      else if (/KIT|JUNTO/i.test(text)) atividade = 'Embalagem de kits';
+      return { quantidade, unidade, atividade };
+    }
+
+    function prepareProductionButtons() {
+      document.querySelectorAll('.person-view').forEach(section => {
+        const collaborator = section.querySelector('.person-page-header h3')?.textContent.replace(/^👤\s*/, '').trim();
+        if (!collaborator) return;
+
+        section.querySelectorAll('.person-day').forEach(day => {
+          const dateText = day.querySelector('.person-day-date')?.innerHTML.split('<br>')[0]?.trim();
+          if (!dateText) return;
+          const [dd, mm, yyyy] = dateText.split('/');
+          const isoDate = `${yyyy}-${mm}-${dd}`;
+          const week = (mm === '08' && Number(dd) >= 24) ? 1 : 2;
+
+          day.querySelectorAll('.period-item').forEach((item, index) => {
+            const periodLabels = ['Manhã', 'Tarde', 'Noite'];
+            const period = periodLabels[index] || '';
+            const task = item.querySelector('.period-task')?.textContent.trim() || '';
+            const button = item.querySelector('.done-btn');
+            if (!button) return;
+            const parsed = parseTask(task);
+            button.dataset.collaborador = collaborator;
+            button.dataset.data = isoDate;
+            button.dataset.semana = week;
+            button.dataset.periodo = period;
+            button.dataset.atividade = parsed.atividade;
+            button.dataset.quantidade = parsed.quantidade ?? '';
+            button.dataset.unidade = parsed.unidade ?? '';
+
+            if (task === 'X' || task === '—' || task === '-') {
+              button.disabled = true;
+              button.textContent = '—';
+              button.classList.add('inactive');
+            }
+          });
+        });
+      });
+    }
+
+    async function loadProductionStatus() {
+      prepareProductionButtons();
+      const { data, error } = await supabaseClient
+        .from('producao')
+        .select('colaborador,data,semana,periodo,realizado');
+
+      if (error) {
+        console.error('Erro ao consultar a Agenda CLOT:', error);
+        return;
       }
+
+      const doneKeys = new Set((data || []).filter(r => r.realizado).map(r =>
+        `${r.colaborador}|${r.data}|${r.semana}|${r.periodo}`
+      ));
+
+      document.querySelectorAll('.done-btn').forEach(button => {
+        const key = `${button.dataset.collaborador}|${button.dataset.data}|${button.dataset.semana}|${button.dataset.periodo}`;
+        if (doneKeys.has(key)) setButtonDone(button);
+      });
+    }
+
+    function setButtonDone(button) {
+      button.classList.add('done');
+      button.textContent = '✓ Já fiz';
+      button.disabled = true;
+    }
+
+    async function toggleDone(button) {
+      if (button.disabled || button.classList.contains('done')) return;
+      button.disabled = true;
+      button.textContent = 'Salvando…';
+
+      const payload = {
+        colaborador: button.dataset.collaborador,
+        data: button.dataset.data,
+        semana: Number(button.dataset.semana),
+        periodo: button.dataset.periodo,
+        atividade: button.dataset.atividade,
+        quantidade: button.dataset.quantidade === '' ? null : Number(button.dataset.quantidade),
+        unidade: button.dataset.unidade || null,
+        realizado: true,
+        realizado_em: new Date().toISOString()
+      };
+
+      const { error } = await supabaseClient.from('producao').insert(payload);
+
+      if (error) {
+        console.error('Erro ao salvar:', error);
+        button.disabled = false;
+        button.textContent = '☐ Tentar novamente';
+        alert('Não foi possível salvar agora. Verifique sua conexão e tente novamente.');
+        return;
+      }
+
+      setButtonDone(button);
     }
 
     function showAgenda(id) {
@@ -1742,6 +1855,10 @@
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProductionStatus();
+    });
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
