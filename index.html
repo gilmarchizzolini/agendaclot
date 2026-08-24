@@ -352,6 +352,123 @@
       padding: 22px 10px 30px;
     }
 
+
+
+    .agenda-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 26px;
+      margin-bottom: 16px;
+    }
+
+    .agenda-page-header h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    .agenda-page-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .agenda-view {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .agenda-view.active {
+      display: block;
+    }
+
+    .agenda-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .agenda-head h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    .back-button {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .agenda-table-wrap {
+      overflow-x: auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .agenda-table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+    }
+
+    .agenda-table th {
+      background: var(--navy);
+      color: white;
+      padding: 13px 10px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .agenda-table td {
+      padding: 11px 9px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    .agenda-table td:first-child {
+      font-weight: 800;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .agenda-table .day-row td {
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .agenda-table .morning { background: #F7FBFF; }
+    .agenda-table .afternoon { background: #FBFCFE; }
+    .agenda-table .night { background: #F7F9FC; }
+
+    .agenda-note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: #FFF8E1;
+      border: 1px solid #F1DF9C;
+      border-radius: 13px;
+      color: #665318;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
     @media (max-width: 850px) {
       .hero { grid-template-columns: 1fr; }
       .stages { grid-template-columns: repeat(2, 1fr); }
@@ -442,19 +559,132 @@
     </div>
 
     <section class="nav-grid">
-      <article class="card nav-card" onclick="alert('Semana 1 — agenda original será inserida aqui na próxima etapa.')">
+      <article class="card nav-card" onclick="showAgenda('week1')">
         <h4>📅 Semana 1</h4>
         <p>24/08/2026 → 28/08/2026</p>
         <button class="button">Ver agenda</button>
       </article>
 
-      <article class="card nav-card" onclick="alert('Semana 2 — agenda original será inserida aqui na próxima etapa.')">
+      <article class="card nav-card" onclick="showAgenda('week2')">
         <h4>📅 Semana 2</h4>
         <p>31/08/2026 → 04/09/2026</p>
         <button class="button">Ver agenda</button>
       </article>
     </section>
 
+
+
+    <section id="week1" class="agenda-view">
+      <div class="agenda-page-header">
+        <div>
+          <div class="eyebrow">Agenda Produtiva CLOT</div>
+          <h3>📅 Semana 1</h3>
+          <p>24/08/2026 → 28/08/2026</p>
+        </div>
+        <button class="back-button" onclick="hideAgendas()">← Voltar</button>
+      </div>
+
+      <div class="agenda-table-wrap">
+        <table class="agenda-table">
+          <thead>
+            <tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr>
+          </thead>
+          <tbody>
+            <tr class="day-row"><td colspan="5">24/08/2026 • Segunda-feira</td></tr>
+            <tr><td>24/08</td><td>Gesa</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>24/08</td><td>Biel</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>24/08</td><td>Eduardo</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>24/08</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>24/08</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">25/08/2026 • Terça-feira</td></tr>
+            <tr><td>25/08</td><td>Gesa</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>25/08</td><td>Biel</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>25/08</td><td>Eduardo</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>25/08</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>25/08</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">26/08/2026 • Quarta-feira</td></tr>
+            <tr><td>26/08</td><td>Gesa</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>26/08</td><td>Biel</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>26/08</td><td>Eduardo</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>26/08</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>26/08</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">27/08/2026 • Quinta-feira</td></tr>
+            <tr><td>27/08</td><td>Gesa</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>27/08</td><td>Biel</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>27/08</td><td>Eduardo</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>27/08</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>27/08</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">28/08/2026 • Sexta-feira</td></tr>
+            <tr><td>28/08</td><td>Gesa</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>X</td></tr>
+            <tr><td>28/08</td><td>Biel</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>X</td></tr>
+            <tr><td>28/08</td><td>Eduardo</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>X</td></tr>
+            <tr><td>28/08</td><td>Natália</td><td>—</td><td>—</td><td>X</td></tr>
+            <tr><td>28/08</td><td>Juliana</td><td>—</td><td>—</td><td>X</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="agenda-note"><strong>Semana 1.</strong> Esta é a programação-base. O realizado será acompanhado e ajustado conforme a produção real.</div>
+    </section>
+
+    <section id="week2" class="agenda-view">
+      <div class="agenda-page-header">
+        <div>
+          <div class="eyebrow">Agenda Produtiva CLOT</div>
+          <h3>📅 Semana 2</h3>
+          <p>31/08/2026 → 04/09/2026</p>
+        </div>
+        <button class="back-button" onclick="hideAgendas()">← Voltar</button>
+      </div>
+
+      <div class="agenda-table-wrap">
+        <table class="agenda-table">
+          <thead>
+            <tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr>
+          </thead>
+          <tbody>
+            <tr class="day-row"><td colspan="5">31/08/2026 • Segunda-feira</td></tr>
+            <tr><td>31/08</td><td>Gesa</td><td>7 PAL • Etiquetagem</td><td>7 PAL • Etiquetagem</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>31/08</td><td>Biel</td><td>8 PAL • Etiquetagem</td><td>8 PAL • Etiquetagem</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>31/08</td><td>Eduardo</td><td>500 CX</td><td>500 CX</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>31/08</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>31/08</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">01/09/2026 • Terça-feira</td></tr>
+            <tr><td>01/09</td><td>Gesa</td><td>500 CX</td><td>500 CX</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>01/09</td><td>Biel</td><td>500 CX</td><td>500 CX</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>01/09</td><td>Eduardo</td><td>500 CX</td><td>500 CX</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>01/09</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>01/09</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">02/09/2026 • Quarta-feira</td></tr>
+            <tr><td>02/09</td><td>Gesa</td><td>500 CX</td><td>500 CX</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>02/09</td><td>Biel</td><td>500 KIT</td><td>500 KIT</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>02/09</td><td>Eduardo</td><td>KITS JUNTOS</td><td>KITS JUNTOS</td><td>35 PAL • ENV + B → 2,5 PAL TAMP</td></tr>
+            <tr><td>02/09</td><td>Natália</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+            <tr><td>02/09</td><td>Juliana</td><td>—</td><td>—</td><td>10 PAL • TAMP</td></tr>
+
+            <tr class="day-row"><td colspan="5">03/09/2026 • Quinta-feira</td></tr>
+            <tr><td>03/09</td><td>Gesa</td><td>500 CX</td><td>500 KIT</td><td>500 KIT</td></tr>
+            <tr><td>03/09</td><td>Biel</td><td>500 KIT</td><td>JUNTO KIT</td><td>JUNTO KIT</td></tr>
+            <tr><td>03/09</td><td>Eduardo</td><td>500 KIT</td><td>500 KIT</td><td>500 KIT</td></tr>
+            <tr><td>03/09</td><td>Natália</td><td>—</td><td>JUNTO KIT</td><td>JUNTO KIT</td></tr>
+            <tr><td>03/09</td><td>Juliana</td><td>X</td><td>X</td><td>X</td></tr>
+
+            <tr class="day-row"><td colspan="5">04/09/2026 • Sexta-feira</td></tr>
+            <tr><td>04/09</td><td>Gesa</td><td>500 KIT</td><td>500 KIT</td><td>X</td></tr>
+            <tr><td>04/09</td><td>Biel</td><td>JUNTO KIT</td><td>JUNTO KIT</td><td>X</td></tr>
+            <tr><td>04/09</td><td>Eduardo</td><td>500 KIT</td><td>500 KIT</td><td>X</td></tr>
+            <tr><td>04/09</td><td>Natália</td><td>JUNTO KIT</td><td>JUNTO KIT</td><td>X</td></tr>
+            <tr><td>04/09</td><td>Juliana</td><td>X</td><td>X</td><td>X</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="agenda-note"><strong>Semana 2.</strong> Esta é a programação-base. O realizado será acompanhado e ajustado conforme a produção real.</div>
+    </section>
     <div class="section-title">
       <h3>Minha agenda</h3>
       <p>Escolha seu nome</p>
@@ -499,6 +729,28 @@
   </footer>
 
   <script>
+
+    function showAgenda(id) {
+      document.querySelectorAll(".agenda-view").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll("main > section:not(.agenda-view), main > .section-title, main > .team, main > .note")
+        .forEach(el => el.dataset.hiddenByAgenda = el.style.display = "none");
+
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add("active");
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function hideAgendas() {
+      document.querySelectorAll(".agenda-view").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll("[data-hidden-by-agenda]").forEach(el => {
+        el.style.display = "";
+        delete el.dataset.hiddenByAgenda;
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("sw.js").catch(() => {});

@@ -1,4 +1,4 @@
-const CACHE_NAME = "clot-agenda-v1";
+const CACHE_NAME = "clot-agenda-v3";
 const ASSETS = [
   "./",
   "./index.html",
