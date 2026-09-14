@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#17365D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Agenda CLOT">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <title>CLOT — Agenda Produtiva</title>
+
+  <style>
+    :root {
+      --navy: #17365D;
+      --blue: #2F75B5;
+      --blue-light: #EAF3FA;
+      --red: #C00000;
+      --green: #548235;
+      --green-light: #EDF5E8;
+      --orange: #C55A11;
+      --orange-light: #FFF2E8;
+      --purple: #7030A0;
+      --purple-light: #F3ECF8;
+      --bg: #F5F7FA;
+      --card: #FFFFFF;
+      --text: #17212B;
+      --muted: #667085;
+      --border: #D9E1EA;
+      --shadow: 0 10px 28px rgba(23, 54, 93, .08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .topbar {
+      background: var(--navy);
+      color: white;
+      padding: 18px 22px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 4px 18px rgba(0,0,0,.12);
+    }
+
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-logo {
+      width: 118px;
+      height: 44px;
+      object-fit: contain;
+      object-position: left center;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      opacity: .78;
+      font-size: 12px;
+    }
+
+    .period {
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(255,255,255,.12);
+      padding: 10px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 30px 20px 44px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero-card, .goal-card, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 30px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-card h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.05;
+    }
+
+    .hero-card .flow {
+      margin: 18px 0 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .hero-card .flow span {
+      color: var(--blue);
+      margin: 0 5px;
+    }
+
+    .goal-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(145deg, #17365D, #245A91);
+      color: white;
+    }
+
+    .goal-card small {
+      font-size: 12px;
+      opacity: .8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .goal-number {
+      font-size: clamp(54px, 8vw, 76px);
+      line-height: .95;
+      font-weight: 900;
+      margin: 8px 0 5px;
+    }
+
+    .goal-label {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      margin: 30px 0 13px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .stage {
+      padding: 20px;
+      min-height: 145px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: white;
+    }
+
+    .stage .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      margin-bottom: 14px;
+    }
+
+    .stage h4 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      color: var(--navy);
+    }
+
+    .stage strong {
+      font-size: 24px;
+    }
+
+    .stage p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .label .icon { background: var(--blue-light); }
+    .fill .icon { background: var(--green-light); }
+    .cap .icon { background: #E9F2E4; }
+    .pack .icon { background: var(--orange-light); }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .nav-card {
+      padding: 22px;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(23,54,93,.13);
+    }
+
+    .nav-card h4 {
+      margin: 0;
+      font-size: 19px;
+      color: var(--navy);
+    }
+
+    .nav-card p {
+      margin: 6px 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .button {
+      border: 0;
+      background: var(--navy);
+      color: white;
+      padding: 11px 15px;
+      border-radius: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .person {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 15px;
+      padding: 17px 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 5px 16px rgba(23,54,93,.05);
+      transition: .18s ease;
+    }
+
+    .person:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .person strong {
+      display: block;
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    .person span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .note {
+      margin-top: 22px;
+      padding: 17px 19px;
+      border-radius: 15px;
+      background: #FFF8E1;
+      border: 1px solid #F1DF9C;
+      color: #665318;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 22px 10px 30px;
+    }
+
+
+
+
+    .person-view {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .person-view.active {
+      display: block;
+    }
+
+    .person-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 26px;
+      margin-bottom: 16px;
+    }
+
+    .person-page-header h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    .person-page-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .week-person-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .week-person-title {
+      background: var(--navy);
+      color: white;
+      padding: 14px 18px;
+      font-weight: 800;
+    }
+
+    .person-day {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .person-day:last-child {
+      border-bottom: 0;
+    }
+
+    .person-day-date {
+      padding: 16px;
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .person-periods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .period-item {
+      padding: 14px;
+      border-left: 1px solid var(--border);
+      min-height: 105px;
+    }
+
+    .period-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .period-task {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+      min-height: 38px;
+    }
+
+    .done-btn {
+      margin-top: 9px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      border-radius: 9px;
+      padding: 7px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .done-btn:hover {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+
+    .done-btn:disabled {
+      cursor: default;
+      opacity: .75;
+    }
+    .done-btn.inactive {
+      border-color: #e2e8f0;
+      color: #94a3b8;
+      background: #f8fafc;
+      cursor: default;
+    }
+
+    .done-btn.done {
+      background: var(--green-light);
+      border-color: #A8C993;
+      color: #355522;
+    }
+
+    .person-progress {
+      margin-top: 12px;
+      padding: 13px 16px;
+      background: #F8FAFC;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .person-progress strong {
+      color: var(--navy);
+    }
+
+    @media (max-width: 720px) {
+      .person-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .person-day {
+        grid-template-columns: 1fr;
+      }
+
+      .person-day-date {
+        padding: 11px 14px;
+      }
+
+      .person-periods {
+        grid-template-columns: 1fr;
+      }
+
+      .period-item {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    .agenda-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 26px;
+      margin-bottom: 16px;
+    }
+
+    .agenda-page-header h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    .agenda-page-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .agenda-view {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .agenda-view.active {
+      display: block;
+    }
+
+    .agenda-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .agenda-head h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    .back-button {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .agenda-table-wrap {
+      overflow-x: auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .agenda-table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+    }
+
+    .agenda-table th {
+      background: var(--navy);
+      color: white;
+      padding: 13px 10px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .agenda-table td {
+      padding: 11px 9px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    .agenda-table td:first-child {
+      font-weight: 800;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .agenda-table .day-row td {
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .agenda-table .morning { background: #F7FBFF; }
+    .agenda-table .afternoon { background: #FBFCFE; }
+    .agenda-table .night { background: #F7F9FC; }
+
+    .agenda-note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: #FFF8E1;
+      border: 1px solid #F1DF9C;
+      border-radius: 13px;
+      color: #665318;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; }
+      .stages { grid-template-columns: repeat(2, 1fr); }
+      .team { grid-template-columns: repeat(2, 1fr); }
+      .nav-grid { grid-template-columns: 1fr; }
+      .period { display: none; }
+    }
+
+    @media (max-width: 520px) {
+      main { padding: 20px 13px 32px; }
+      .hero-card { padding: 23px; }
+      .stages { grid-template-columns: 1fr; }
+      .team { grid-template-columns: 1fr 1fr; }
+      .brand-logo { width: 105px; height: 40px; }
+      .brand h1 { font-size: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img class="brand-logo" src="logo.png" alt="CLOT">
+        <div>
+          <h1>AGENDA PRODUTIVA</h1>
+          <p>Planejamento e acompanhamento da produção</p>
+        </div>
+      </div>
+      <div class="period">14/09 → 25/09/2026 • SETEMBRO/2026</div>
+    </div>
+  </header>
+
+  
+<main>
+<section class="hero"><div class="hero-card"><div class="eyebrow">Planejamento de produção • Setembro/2026</div><h2>Agenda produtiva atualizada</h2><div class="flow">Etiquetar <span>→</span> Envasar + Batoque <span>→</span> Tampar <span>→</span> Etiquetar caixas / Embalar</div><p style="margin:16px 0 0;color:var(--muted);line-height:1.5"><strong>Período da planilha:</strong> 14/09/2026 → 25/09/2026. A programação de 08/09 a 10/09 não consta na aba “Setembro” enviada nesta atualização.</p></div><div class="goal-card"><small>Meta principal</small><div class="goal-number">261</div><div class="goal-label">PAL</div></div></section>
+<div class="section-title"><h3>Panorama da produção</h3><p>Dados da planilha “Setembro”</p></div>
+<section class="stages"><article class="stage label"><div class="icon">🏷️</div><h4>Etiquetagem</h4><strong>261 PAL</strong><p>Paletes programados</p></article><article class="stage fill"><div class="icon">🧪</div><h4>Envase</h4><strong>261 PAL</strong><p>Envase programado</p></article><article class="stage cap"><div class="icon">🔒</div><h4>Tampas</h4><strong>261 PAL</strong><p>Tampagem programada</p></article><article class="stage pack"><div class="icon">📦</div><h4>Caixas</h4><strong>5.600 CX</strong><p>Meta indicada na planilha</p></article></section>
+<div class="section-title"><h3>Resumo dos reagentes</h3><p>Frascos e paletes da aba “Setembro”</p></div>
+<section class="stages"><article class="stage label"><div class="icon">🧴</div><h4>TP 2 ML</h4><strong>34.763</strong><p>158 paletes</p></article><article class="stage fill"><div class="icon">🧴</div><h4>TTPA</h4><strong>11.883</strong><p>54 paletes</p></article><article class="stage cap"><div class="icon">🧴</div><h4>CLORETO</h4><strong>7.923</strong><p>36 paletes</p></article><article class="stage pack"><div class="icon">🧮</div><h4>Total frascos</h4><strong>54.569</strong><p>261 paletes</p></article></section>
+<div class="section-title"><h3>Consulte a agenda</h3><p>Escolha uma semana</p></div><section class="nav-grid"><article class="card nav-card" onclick="showAgenda('week1')"><h4>📅 Semana 1</h4><p>14/09/2026 → 18/09/2026</p><button class="button">Ver agenda</button></article><article class="card nav-card" onclick="showAgenda('week2')"><h4>📅 Semana 2</h4><p>21/09/2026 → 25/09/2026</p><button class="button">Ver agenda</button></article></section>
+<section id="week1" class="agenda-view"><div class="agenda-page-header"><div><div class="eyebrow">Agenda Produtiva CLOT</div><h3>📅 Semana 1</h3><p>14/09/2026 → 18/09/2026</p></div><button class="back-button" onclick="hideAgendas()">← Voltar</button></div><div class="agenda-table-wrap"><table class="agenda-table"><thead><tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr></thead><tbody>
+<tr class="day-row"><td colspan="5">14/09/2026 • Segunda-feira</td></tr>
+<tr><td>14/09</td><td>Gesa</td><td>7</td><td>7</td><td>7</td></tr>
+<tr><td>14/09</td><td>Biel</td><td>8</td><td>7</td><td>7</td></tr>
+<tr><td>14/09</td><td>Eduardo</td><td>FIB</td><td>FIB</td><td>7</td></tr>
+<tr><td>14/09</td><td>Hilário</td><td>—</td><td>—</td><td>X</td></tr>
+<tr><td>14/09</td><td>Juliana</td><td>—</td><td>—</td><td>X</td></tr>
+<tr class="day-row"><td colspan="5">15/09/2026 • Terça-feira</td></tr>
+<tr><td>15/09</td><td>Gesa</td><td>7</td><td>7</td><td>7</td></tr>
+<tr><td>15/09</td><td>Biel</td><td>8</td><td>7</td><td>7</td></tr>
+<tr><td>15/09</td><td>Eduardo</td><td>8</td><td>7</td><td>7</td></tr>
+<tr><td>15/09</td><td>Hilário</td><td>—</td><td>—</td><td>X</td></tr>
+<tr><td>15/09</td><td>Juliana</td><td>—</td><td>—</td><td>X</td></tr>
+<tr class="day-row"><td colspan="5">16/09/2026 • Quarta-feira</td></tr>
+<tr><td>16/09</td><td>Gesa</td><td>7</td><td>7</td><td>10 Tamp</td></tr>
+<tr><td>16/09</td><td>Biel</td><td>8</td><td>7</td><td>Env + 10 Tamp</td></tr>
+<tr><td>16/09</td><td>Eduardo</td><td>8</td><td>5</td><td>50 Env + 10 Tamp</td></tr>
+<tr><td>16/09</td><td>Hilário</td><td>—</td><td>—</td><td>10 Tamp</td></tr>
+<tr><td>16/09</td><td>Juliana</td><td>—</td><td>—</td><td>10 Tamp</td></tr>
+<tr class="day-row"><td colspan="5">17/09/2026 • Quinta-feira</td></tr>
+<tr><td>17/09</td><td>Gesa</td><td>7</td><td>7</td><td>10 Tamp</td></tr>
+<tr><td>17/09</td><td>Biel</td><td>8</td><td>7</td><td>Env + 10 Tamp</td></tr>
+<tr><td>17/09</td><td>Eduardo</td><td>8</td><td>5</td><td>50 Env + 10 Tamp</td></tr>
+<tr><td>17/09</td><td>Hilário</td><td>—</td><td>—</td><td>10 Tamp</td></tr>
+<tr><td>17/09</td><td>Juliana</td><td>—</td><td>—</td><td>10 Tamp</td></tr>
+<tr class="day-row"><td colspan="5">18/09/2026 • Sexta-feira</td></tr>
+<tr><td>18/09</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr>
+<tr><td>18/09</td><td>Biel</td><td>8</td><td>7</td><td>X</td></tr>
+<tr><td>18/09</td><td>Eduardo</td><td>8</td><td>7</td><td>X</td></tr>
+<tr><td>18/09</td><td>Hilário</td><td>—</td><td>—</td><td>X</td></tr>
+<tr><td>18/09</td><td>Juliana</td><td>—</td><td>—</td><td>X</td></tr>
+</tbody></table></div><div class="agenda-note"><strong>Semana 1.</strong> Programação transcrita da aba “Setembro” da planilha atualizada.</div></section><section id="week2" class="agenda-view"><div class="agenda-page-header"><div><div class="eyebrow">Agenda Produtiva CLOT</div><h3>📅 Semana 2</h3><p>21/09/2026 → 25/09/2026</p></div><button class="back-button" onclick="hideAgendas()">← Voltar</button></div><div class="agenda-table-wrap"><table class="agenda-table"><thead><tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr></thead><tbody>
+<tr class="day-row"><td colspan="5">21/09/2026 • Segunda-feira</td></tr>
+<tr><td>21/09</td><td>Gesa</td><td>800 Etiq CX</td><td>800 Etiq CX</td><td>12 Tamp</td></tr>
+<tr><td>21/09</td><td>Biel</td><td>9</td><td>800 Etiq CX</td><td>36 Env + 12 Tamp</td></tr>
+<tr><td>21/09</td><td>Eduardo</td><td>9</td><td>800 Etiq CX</td><td>36 Env + 12 Tamp</td></tr>
+<tr><td>21/09</td><td>Hilário</td><td>—</td><td>—</td><td>X</td></tr>
+<tr><td>21/09</td><td>Juliana</td><td>—</td><td>—</td><td>X</td></tr>
+<tr class="day-row"><td colspan="5">22/09/2026 • Terça-feira</td></tr>
+<tr><td>22/09</td><td>Gesa</td><td>800 Etiq CX</td><td>12 Tamps</td><td>10 Tamp</td></tr>
+<tr><td>22/09</td><td>Biel</td><td>800 Etiq CX</td><td>45 Env</td><td>10 Tamp</td></tr>
+<tr><td>22/09</td><td>Eduardo</td><td>800 Etiq CX</td><td>45 Env</td><td>10 Tamp</td></tr>
+<tr><td>22/09</td><td>Hilário</td><td>—</td><td>—</td><td>X</td></tr>
+<tr><td>22/09</td><td>Juliana</td><td>—</td><td>—</td><td>X</td></tr>
+<tr class="day-row"><td colspan="5">23/09/2026 • Quarta-feira</td></tr>
+<tr><td>23/09</td><td>Gesa</td><td>12 Tamp</td><td>12 Tamps</td><td>10 Tamp</td></tr>
+<tr><td>23/09</td><td>Biel</td><td>40 Env</td><td>40 Env</td><td>12 Tamp</td></tr>
+<tr><td>23/09</td><td>Eduardo</td><td>40 Env</td><td>40 Env</td><td>12 Tamp</td></tr>
+<tr><td>23/09</td><td>Hilário</td><td>—</td><td>—</td><td>12 Tamp</td></tr>
+<tr><td>23/09</td><td>Juliana</td><td>—</td><td>—</td><td>10 Tamp</td></tr>
+<tr class="day-row"><td colspan="5">24/09/2026 • Quinta-feira</td></tr>
+<tr><td>24/09</td><td>Gesa</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>24/09</td><td>Biel</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>24/09</td><td>Eduardo</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>24/09</td><td>Hilário</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>24/09</td><td>Juliana</td><td>—</td><td>—</td><td>—</td></tr>
+<tr class="day-row"><td colspan="5">25/09/2026 • Sexta-feira</td></tr>
+<tr><td>25/09</td><td>Gesa</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>25/09</td><td>Biel</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>25/09</td><td>Eduardo</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>25/09</td><td>Hilário</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>25/09</td><td>Juliana</td><td>—</td><td>—</td><td>—</td></tr>
+</tbody></table></div><div class="agenda-note"><strong>Semana 2.</strong> Programação transcrita da aba “Setembro” da planilha atualizada.</div></section><section id="person-gesa" class="person-view"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Gesa</h3><p>Programação individual • Setembro/2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 14/09 → 18/09</div>
+<div class="person-day"><div class="person-day-date">14/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">15/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">16/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">17/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">18/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 21/09 → 25/09</div>
+<div class="person-day"><div class="person-day-date">21/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">22/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">12 Tamps</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">23/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">12 Tamps</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">24/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">25/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="person-progress"><strong>Gesa:</strong> marque <strong>“Eu já fiz”</strong> quando concluir cada atividade. Se marcar por engano, use <strong>“↩ Desfazer”</strong>.</div></section><section id="person-biel" class="person-view"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Biel</h3><p>Programação individual • Setembro/2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 14/09 → 18/09</div>
+<div class="person-day"><div class="person-day-date">14/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">15/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">16/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">Env + 10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">17/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">Env + 10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">18/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 21/09 → 25/09</div>
+<div class="person-day"><div class="person-day-date">21/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">9</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">36 Env + 12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">22/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">45 Env</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">23/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">40 Env</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">40 Env</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">24/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">25/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="person-progress"><strong>Biel:</strong> marque <strong>“Eu já fiz”</strong> quando concluir cada atividade. Se marcar por engano, use <strong>“↩ Desfazer”</strong>.</div></section><section id="person-eduardo" class="person-view"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Eduardo</h3><p>Programação individual • Setembro/2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 14/09 → 18/09</div>
+<div class="person-day"><div class="person-day-date">14/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">FIB</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">15/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">16/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">5</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">50 Env + 10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">17/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">5</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">50 Env + 10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">18/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 21/09 → 25/09</div>
+<div class="person-day"><div class="person-day-date">21/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">9</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">36 Env + 12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">22/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">800 Etiq CX</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">45 Env</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">23/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">40 Env</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">40 Env</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">24/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">25/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="person-progress"><strong>Eduardo:</strong> marque <strong>“Eu já fiz”</strong> quando concluir cada atividade. Se marcar por engano, use <strong>“↩ Desfazer”</strong>.</div></section><section id="person-hilario" class="person-view"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Hilário</h3><p>Programação individual • Setembro/2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 14/09 → 18/09</div>
+<div class="person-day"><div class="person-day-date">14/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">15/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">16/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">17/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">18/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 21/09 → 25/09</div>
+<div class="person-day"><div class="person-day-date">21/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">22/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">23/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">24/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">25/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="person-progress"><strong>Hilário:</strong> marque <strong>“Eu já fiz”</strong> quando concluir cada atividade. Se marcar por engano, use <strong>“↩ Desfazer”</strong>.</div></section><section id="person-juliana" class="person-view"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Juliana</h3><p>Programação individual • Setembro/2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 14/09 → 18/09</div>
+<div class="person-day"><div class="person-day-date">14/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">15/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">16/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">17/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">18/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 21/09 → 25/09</div>
+<div class="person-day"><div class="person-day-date">21/09/2026<br>Segunda-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">22/09/2026<br>Terça-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">23/09/2026<br>Quarta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">10 Tamp</div><button class="done-btn" onclick="toggleDone(this)">☐ Eu já fiz</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">24/09/2026<br>Quinta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+<div class="person-day"><div class="person-day-date">25/09/2026<br>Sexta-feira</div><div class="person-periods">
+<div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+<div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div><button class="done-btn inactive" onclick="toggleDone(this)">—</button></div>
+</div></div>
+</div>
+<div class="person-progress"><strong>Juliana:</strong> marque <strong>“Eu já fiz”</strong> quando concluir cada atividade. Se marcar por engano, use <strong>“↩ Desfazer”</strong>.</div></section><div class="section-title"><h3>Minha agenda</h3><p>Escolha seu nome</p></div><section class="team"><div class="person" onclick="showPerson('person-gesa')"><div class="avatar">GE</div><strong>Gesa</strong><span>Ver minha agenda</span></div><div class="person" onclick="showPerson('person-biel')"><div class="avatar">BI</div><strong>Biel</strong><span>Ver minha agenda</span></div><div class="person" onclick="showPerson('person-eduardo')"><div class="avatar">ED</div><strong>Eduardo</strong><span>Ver minha agenda</span></div><div class="person" onclick="showPerson('person-hilario')"><div class="avatar">HI</div><strong>Hilário</strong><span>Ver minha agenda</span></div><div class="person" onclick="showPerson('person-juliana')"><div class="avatar">JU</div><strong>Juliana</strong><span>Ver minha agenda</span></div></section><section class="admin-entry"><article class="card nav-card" onclick="showAdmin()"><h4>📊 Área administrativa</h4><p>Acompanhar planejado × realizado da equipe.</p><button class="button">Abrir ADM</button></article></section>
+<section id="admin-view" class="person-view"><div class="person-page-header"><div><div class="eyebrow">Acompanhamento • CLOT</div><h3>📊 Área administrativa</h3><p>Setembro/2026 • 14/09 → 25/09</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div><div class="stages"><article class="stage label"><div class="icon">🎯</div><h4>Planejado</h4><strong>261 PAL</strong><p>Paletes no período</p></article><article class="stage fill"><div class="icon">✅</div><h4>Realizado</h4><strong id="admin-realizado">0</strong><p>Marcações confirmadas</p></article><article class="stage cap"><div class="icon">📌</div><h4>Registros</h4><strong id="admin-registros">0</strong><p>Registros no banco</p></article><article class="stage pack"><div class="icon">📦</div><h4>Saldo</h4><strong id="admin-saldo">261</strong><p>Paletes − marcações</p></article></div><div class="section-title"><h3>Realizado por colaborador</h3><p>Atualizado diretamente do banco</p></div><div class="agenda-table-wrap"><table class="agenda-table" id="admin-table"><thead><tr><th>Colaborador</th><th>Marcações</th><th>Último registro</th></tr></thead><tbody><tr><td colspan="3">Nenhum registro.</td></tr></tbody></table></div></section>
+<div class="note"><strong>Objetivo:</strong> acompanhar a produção de setembro de forma simples e transparente, respeitando a programação da planilha atualizada.</div></main>
+</main>
+
+  <footer>
+    CLOT • Agenda Produtiva • V10 • Setembro • Supabase + ADM • Atualização automática
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://klxigkpmqwpsioanlpzs.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_7A4hFVjYCkIq2rYFLCrRrQ_AF6hzrWt";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+function showPerson(id) {
+  document.querySelectorAll('.agenda-view,.person-view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('main > section:not(.agenda-view):not(.person-view), main > .section-title, main > .team, main > .note').forEach(el=>{el.dataset.hiddenByAgenda='1';el.style.display='none';});
+  const target=document.getElementById(id); if(target){target.classList.add('active');target.scrollIntoView({behavior:'smooth',block:'start'});}
+}
+function hidePeople(){
+  document.querySelectorAll('.person-view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('[data-hidden-by-agenda]').forEach(el=>{el.style.display='';delete el.dataset.hiddenByAgenda;});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showAgenda(id){
+  document.querySelectorAll('.agenda-view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('main > section:not(.agenda-view), main > .section-title, main > .team, main > .note').forEach(el=>{el.dataset.hiddenByAgenda='1';el.style.display='none';});
+  const target=document.getElementById(id); if(target){target.classList.add('active');target.scrollIntoView({behavior:'smooth',block:'start'});}
+}
+function hideAgendas(){
+  document.querySelectorAll('.agenda-view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('[data-hidden-by-agenda]').forEach(el=>{el.style.display='';delete el.dataset.hiddenByAgenda;});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function parseTask(t){
+  const text=(t||'').trim(); const m=text.match(/(\d+(?:[.,]\d+)?)\s*(PAL|CX|KIT)/i);
+  const quantidade=m?Number(m[1].replace(',','.')):null; const unidade=m?m[2].toUpperCase():null;
+  let atividade=text;
+  if(/etiqu/i.test(text)) atividade=/CX/i.test(text)?'Etiquetagem de caixas':'Etiquetagem';
+  else if(/TAMP/i.test(text)) atividade='Tampar frascos';
+  else if(/ENV/i.test(text)) atividade='Envase + batoque';
+  else if(/KIT|JUNTO/i.test(text)) atividade='Embalagem de kits';
+  return {quantidade,unidade,atividade};
+}
+function prepareProductionButtons(){
+  document.querySelectorAll('.person-view:not(#admin-view)').forEach(section=>{
+    const collaborator=section.querySelector('.person-page-header h3')?.textContent.replace(/^👤\s*/,'').trim(); if(!collaborator)return;
+    section.querySelectorAll('.person-day').forEach(day=>{
+      const dateText=day.querySelector('.person-day-date')?.innerHTML.split('<br>')[0]?.trim(); if(!dateText)return;
+      const [dd,mm,yyyy]=dateText.split('/'); const week=Number(dd)<=18?1:2;
+      day.querySelectorAll('.period-item').forEach((item,index)=>{
+        const period=['Manhã','Tarde','Noite'][index]; const task=item.querySelector('.period-task')?.textContent.trim()||''; const button=item.querySelector('.done-btn'); if(!button)return;
+        const p=parseTask(task); button.dataset.collaborador=collaborator; button.dataset.data=`${yyyy}-${mm}-${dd}`; button.dataset.semana=week; button.dataset.periodo=period; button.dataset.atividade=p.atividade; button.dataset.quantidade=p.quantidade??''; button.dataset.unidade=p.unidade??'';
+      });
+    });
+  });
+}
+function setButtonDone(button){button.classList.add('done');button.classList.remove('inactive');button.disabled=false;button.textContent='↩ Desfazer';}
+async function loadProductionStatus(){
+  prepareProductionButtons();
+  const {data,error}=await supabaseClient.from('producao').select('id,colaborador,data,semana,periodo,realizado').gte('data','2026-09-14').lte('data','2026-09-25').eq('realizado',true);
+  if(error){console.error(error);return;}
+  const map=new Map((data||[]).map(r=>[`${r.colaborador}|${r.data}|${r.semana}|${r.periodo}`,r.id]));
+  document.querySelectorAll('.done-btn').forEach(b=>{if(b.classList.contains('inactive'))return;const key=`${b.dataset.collaborador}|${b.dataset.data}|${b.dataset.semana}|${b.dataset.periodo}`;if(map.has(key)){b.dataset.recordId=map.get(key);setButtonDone(b);}});
+}
+async function toggleDone(button){
+  if(button.dataset.busy==='true'||button.classList.contains('inactive'))return;
+  const isDone=button.classList.contains('done'); const old=button.textContent; button.dataset.busy='true'; button.textContent=isDone?'Desfazendo…':'Salvando…';
+  try{
+    if(!isDone){
+      const payload={colaborador:button.dataset.collaborador,data:button.dataset.data,semana:Number(button.dataset.semana),periodo:button.dataset.periodo,atividade:button.dataset.atividade,quantidade:button.dataset.quantidade===''?null:Number(button.dataset.quantidade),unidade:button.dataset.unidade||null,realizado:true,realizado_em:new Date().toISOString()};
+      const {data,error}=await supabaseClient.from('producao').insert(payload).select('id').single(); if(error)throw error; button.dataset.recordId=data.id;setButtonDone(button);
+    }else{
+      const {error}=await supabaseClient.from('producao').delete().eq('id',button.dataset.recordId); if(error)throw error; button.dataset.recordId='';button.classList.remove('done');button.textContent='☐ Eu já fiz';
+    }
+  }catch(e){console.error(e);button.textContent=old;alert('Não foi possível atualizar este registro. Verifique a conexão e tente novamente.');}
+  finally{button.dataset.busy='false';}
+}
+async function showAdmin(){
+  showPerson('admin-view'); const tbody=document.querySelector('#admin-table tbody'); tbody.innerHTML='<tr><td colspan="3">Carregando…</td></tr>';
+  try{
+    const {data,error}=await supabaseClient.from('producao').select('colaborador,realizado_em').gte('data','2026-09-14').lte('data','2026-09-25').eq('realizado',true).order('realizado_em',{ascending:false}); if(error)throw error;
+    const people=['Gesa','Biel','Eduardo','Hilário','Juliana']; const counts=Object.fromEntries(people.map(p=>[p,0])); const last=Object.fromEntries(people.map(p=>[p,'—']));
+    (data||[]).forEach(r=>{if(counts[r.colaborador]!==undefined){counts[r.colaborador]++;if(last[r.colaborador]==='—'&&r.realizado_em)last[r.colaborador]=new Date(r.realizado_em).toLocaleString('pt-BR');}});
+    const total=(data||[]).length; document.getElementById('admin-realizado').textContent=total;document.getElementById('admin-registros').textContent=total;document.getElementById('admin-saldo').textContent=Math.max(261-total,0);
+    tbody.innerHTML=people.map(p=>`<tr><td><strong>${p}</strong></td><td>${counts[p]}</td><td>${last[p]}</td></tr>`).join('');
+  }catch(e){console.error(e);tbody.innerHTML='<tr><td colspan="3">Não foi possível consultar o banco.</td></tr>';}
+}
+document.addEventListener('DOMContentLoaded',loadProductionStatus);
+if('serviceWorker' in navigator){
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading) return;
+    reloading = true;
+    window.location.reload();
+  });
+  navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'})
+    .then(reg => reg.update())
+    .catch(()=>{});
+}
+</script>
+</body>
+</html>
