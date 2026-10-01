@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#17365D" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="Agenda CLOT" name="apple-mobile-web-app-title"/>
+<link href="manifest.json" rel="manifest"/>
+<link href="icon-180.png" rel="apple-touch-icon"/>
+<title>CLOT — Agenda Produtiva</title>
+<style>
+    :root {
+      --navy: #17365D;
+      --blue: #2F75B5;
+      --blue-light: #EAF3FA;
+      --red: #C00000;
+      --green: #548235;
+      --green-light: #EDF5E8;
+      --orange: #C55A11;
+      --orange-light: #FFF2E8;
+      --purple: #7030A0;
+      --purple-light: #F3ECF8;
+      --bg: #F5F7FA;
+      --card: #FFFFFF;
+      --text: #17212B;
+      --muted: #667085;
+      --border: #D9E1EA;
+      --shadow: 0 10px 28px rgba(23, 54, 93, .08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .topbar {
+      background: var(--navy);
+      color: white;
+      padding: 18px 22px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 4px 18px rgba(0,0,0,.12);
+    }
+
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-logo {
+      width: 118px;
+      height: 44px;
+      object-fit: contain;
+      object-position: left center;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      opacity: .78;
+      font-size: 12px;
+    }
+
+    .period {
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(255,255,255,.12);
+      padding: 10px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 30px 20px 44px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero-card, .goal-card, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 30px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-card h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.05;
+    }
+
+    .hero-card .flow {
+      margin: 18px 0 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .hero-card .flow span {
+      color: var(--blue);
+      margin: 0 5px;
+    }
+
+    .goal-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(145deg, #17365D, #245A91);
+      color: white;
+    }
+
+    .goal-card small {
+      font-size: 12px;
+      opacity: .8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .goal-number {
+      font-size: clamp(54px, 8vw, 76px);
+      line-height: .95;
+      font-weight: 900;
+      margin: 8px 0 5px;
+    }
+
+    .goal-label {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      margin: 30px 0 13px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .stage {
+      padding: 20px;
+      min-height: 145px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: white;
+    }
+
+    .stage .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      margin-bottom: 14px;
+    }
+
+    .stage h4 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      color: var(--navy);
+    }
+
+    .stage strong {
+      font-size: 24px;
+    }
+
+    .stage p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .label .icon { background: var(--blue-light); }
+    .fill .icon { background: var(--green-light); }
+    .cap .icon { background: #E9F2E4; }
+    .pack .icon { background: var(--orange-light); }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .nav-card {
+      padding: 22px;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(23,54,93,.13);
+    }
+
+    .nav-card h4 {
+      margin: 0;
+      font-size: 19px;
+      color: var(--navy);
+    }
+
+    .nav-card p {
+      margin: 6px 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .button {
+      border: 0;
+      background: var(--navy);
+      color: white;
+      padding: 11px 15px;
+      border-radius: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .person {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 15px;
+      padding: 17px 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 5px 16px rgba(23,54,93,.05);
+      transition: .18s ease;
+    }
+
+    .person:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .person strong {
+      display: block;
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    .person span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .note {
+      margin-top: 22px;
+      padding: 17px 19px;
+      border-radius: 15px;
+      background: #FFF8E1;
+      border: 1px solid #F1DF9C;
+      color: #665318;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 22px 10px 30px;
+    }
+
+
+
+
+    .person-view {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .person-view.active {
+      display: block;
+    }
+
+    .person-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 26px;
+      margin-bottom: 16px;
+    }
+
+    .person-page-header h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    .person-page-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .week-person-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .week-person-title {
+      background: var(--navy);
+      color: white;
+      padding: 14px 18px;
+      font-weight: 800;
+    }
+
+    .person-day {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .person-day:last-child {
+      border-bottom: 0;
+    }
+
+    .person-day-date {
+      padding: 16px;
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .person-periods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .period-item {
+      padding: 14px;
+      border-left: 1px solid var(--border);
+      min-height: 105px;
+    }
+
+    .period-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .period-task {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+      min-height: 38px;
+    }
+
+    @media (max-width: 720px) {
+      .person-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .person-day {
+        grid-template-columns: 1fr;
+      }
+
+      .person-day-date {
+        padding: 11px 14px;
+      }
+
+      .person-periods {
+        grid-template-columns: 1fr;
+      }
+
+      .period-item {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    .agenda-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 26px;
+      margin-bottom: 16px;
+    }
+
+    .agenda-page-header h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 28px;
+    }
+
+    .agenda-page-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .agenda-view {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .agenda-view.active {
+      display: block;
+    }
+
+    .agenda-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .agenda-head h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 22px;
+    }
+
+    .back-button {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .agenda-table-wrap {
+      overflow-x: auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .agenda-table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+    }
+
+    .agenda-table th {
+      background: var(--navy);
+      color: white;
+      padding: 13px 10px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .agenda-table td {
+      padding: 11px 9px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    .agenda-table td:first-child {
+      font-weight: 800;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .agenda-table .day-row td {
+      background: var(--blue-light);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .agenda-table .morning { background: #F7FBFF; }
+    .agenda-table .afternoon { background: #FBFCFE; }
+    .agenda-table .night { background: #F7F9FC; }
+
+    .agenda-note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: #FFF8E1;
+      border: 1px solid #F1DF9C;
+      border-radius: 13px;
+      color: #665318;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; }
+      .stages { grid-template-columns: repeat(2, 1fr); }
+      .team { grid-template-columns: repeat(2, 1fr); }
+      .nav-grid { grid-template-columns: 1fr; }
+      .period { display: none; }
+    }
+
+    @media (max-width: 520px) {
+      main { padding: 20px 13px 32px; }
+      .hero-card { padding: 23px; }
+      .stages { grid-template-columns: 1fr; }
+      .team { grid-template-columns: 1fr 1fr; }
+      .brand-logo { width: 105px; height: 40px; }
+      .brand h1 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><img alt="CLOT" class="brand-logo" src="logo.png"/><div><h1>AGENDA PRODUTIVA</h1><p>Planejamento e acompanhamento da produção</p></div></div><div class="period">28/09 → 16/10/2026 • SETEMBRO/OUTUBRO 2026</div></div></header>
+<main>
+<section class="hero"><div class="hero-card"><div class="eyebrow">Planejamento de produção • Setembro/Outubro 2026</div><h2>Agenda produtiva atualizada</h2><div class="flow">Etiquetar <span>→</span> Etiquetar caixas <span>→</span> Envasar + Batoque <span>→</span> Tampar</div><p style="margin:16px 0 0;color:var(--muted);line-height:1.5"><strong>Período da agenda:</strong> 28/09/2026 → 16/10/2026.</p></div><div class="goal-card"><small>Meta principal</small><div class="goal-number">261</div><div class="goal-label">PAL</div></div></section>
+<div class="section-title"><h3>Panorama da produção</h3><p>Resumo da nova agenda</p></div><section class="stages"><article class="stage label"><div class="icon">🏷️</div><h4>Etiquetagem</h4><strong>261 PAL</strong><p>Total programado</p></article><article class="stage pack"><div class="icon">📦</div><h4>Caixas</h4><strong>5.600 CX</strong><p>Meta programada</p></article><article class="stage fill"><div class="icon">🧪</div><h4>Envase</h4><strong>261 PAL</strong><p>Total programado</p></article><article class="stage cap"><div class="icon">🔒</div><h4>Tampas</h4><strong>261 PAL</strong><p>Total programado</p></article></section>
+<div class="section-title"><h3>Consulte a agenda</h3><p>Escolha uma semana</p></div><section class="nav-grid">
+<article class="card nav-card" onclick="showAgenda('week1')"><h4>📅 Semana 1</h4><p>28/09/2026 → 02/10/2026</p><button class="button">Ver agenda</button></article>
+<article class="card nav-card" onclick="showAgenda('week2')"><h4>📅 Semana 2</h4><p>05/10/2026 → 09/10/2026</p><button class="button">Ver agenda</button></article>
+<article class="card nav-card" onclick="showAgenda('week3')"><h4>📅 Semana 3</h4><p>12/10/2026 → 16/10/2026</p><button class="button">Ver agenda</button></article>
+</section>
+<section class="agenda-view" id="week1"><div class="agenda-page-header"><div><div class="eyebrow">Agenda Produtiva CLOT</div><h3>📅 Semana 1</h3><p>28/09/2026 → 02/10/2026</p></div><button class="back-button" onclick="hideAgendas()">← Voltar</button></div><div class="agenda-table-wrap"><table class="agenda-table"><thead><tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr></thead><tbody><tr class="day-row"><td colspan="5">28/09/2026 • Segunda-feira</td></tr><tr><td>28/09</td><td>Gesa</td><td>—</td><td>—</td><td>—</td></tr><tr><td>28/09</td><td>Biel</td><td>—</td><td>—</td><td>—</td></tr><tr><td>28/09</td><td>Eduardo</td><td>—</td><td>—</td><td>—</td></tr><tr class="day-row"><td colspan="5">29/09/2026 • Terça-feira</td></tr><tr><td>29/09</td><td>Gesa</td><td>—</td><td>7</td><td>X</td></tr><tr><td>29/09</td><td>Biel</td><td>—</td><td>7</td><td>X</td></tr><tr><td>29/09</td><td>Eduardo</td><td>X</td><td>X</td><td>X</td></tr><tr class="day-row"><td colspan="5">30/09/2026 • Quarta-feira</td></tr><tr><td>30/09</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr><tr><td>30/09</td><td>Biel</td><td>7</td><td>7</td><td>X</td></tr><tr><td>30/09</td><td>Eduardo</td><td>7</td><td>X</td><td>X</td></tr><tr class="day-row"><td colspan="5">01/10/2026 • Quinta-feira</td></tr><tr><td>01/10</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr><tr><td>01/10</td><td>Biel</td><td>7</td><td>7</td><td>X</td></tr><tr><td>01/10</td><td>Eduardo</td><td>7</td><td>7</td><td>X</td></tr><tr class="day-row"><td colspan="5">02/10/2026 • Sexta-feira</td></tr><tr><td>02/10</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr><tr><td>02/10</td><td>Biel</td><td>7</td><td>7</td><td>X</td></tr><tr><td>02/10</td><td>Eduardo</td><td>7</td><td>7</td><td>X</td></tr></tbody></table></div><div class="agenda-note"><strong>Semana 1.</strong> Programação transcrita da nova agenda enviada.</div></section>
+<section class="agenda-view" id="week2"><div class="agenda-page-header"><div><div class="eyebrow">Agenda Produtiva CLOT</div><h3>📅 Semana 2</h3><p>05/10/2026 → 09/10/2026</p></div><button class="back-button" onclick="hideAgendas()">← Voltar</button></div><div class="agenda-table-wrap"><table class="agenda-table"><thead><tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr></thead><tbody><tr class="day-row"><td colspan="5">05/10/2026 • Segunda-feira</td></tr><tr><td>05/10</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr><tr><td>05/10</td><td>Biel</td><td>7</td><td>7</td><td>X</td></tr><tr><td>05/10</td><td>Eduardo</td><td>7</td><td>7</td><td>X</td></tr><tr class="day-row"><td colspan="5">06/10/2026 • Terça-feira</td></tr><tr><td>06/10</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr><tr><td>06/10</td><td>Biel</td><td>7</td><td>7</td><td>X</td></tr><tr><td>06/10</td><td>Eduardo</td><td>7</td><td>7</td><td>X</td></tr><tr class="day-row"><td colspan="5">07/10/2026 • Quarta-feira</td></tr><tr><td>07/10</td><td>Gesa</td><td>7</td><td>7</td><td>X</td></tr><tr><td>07/10</td><td>Biel</td><td>8</td><td>7</td><td>X</td></tr><tr><td>07/10</td><td>Eduardo</td><td>8</td><td>7</td><td>X</td></tr><tr class="day-row"><td colspan="5">08/10/2026 • Quinta-feira</td></tr><tr><td>08/10</td><td>Gesa</td><td>700 Cxs</td><td>700 Cxs</td><td>X</td></tr><tr><td>08/10</td><td>Biel</td><td>700 Cxs</td><td>700 Cxs</td><td>X</td></tr><tr><td>08/10</td><td>Eduardo</td><td>700 Cxs</td><td>4200 Cxs</td><td>X</td></tr><tr class="day-row"><td colspan="5">09/10/2026 • Sexta-feira</td></tr><tr><td>09/10</td><td>Gesa</td><td>700 Cxs</td><td>FIB / Control</td><td>X</td></tr><tr><td>09/10</td><td>Biel</td><td>700 Cxs</td><td>FIB / Control</td><td>X</td></tr><tr><td>09/10</td><td>Eduardo</td><td>FIB / Control</td><td>FIB / Control</td><td>X</td></tr></tbody></table></div><div class="agenda-note"><strong>Semana 2.</strong> Programação transcrita da nova agenda enviada.</div></section>
+<section class="agenda-view" id="week3"><div class="agenda-page-header"><div><div class="eyebrow">Agenda Produtiva CLOT</div><h3>📅 Semana 3</h3><p>12/10/2026 → 16/10/2026</p></div><button class="back-button" onclick="hideAgendas()">← Voltar</button></div><div class="agenda-table-wrap"><table class="agenda-table"><thead><tr><th>Data</th><th>Colaborador</th><th>Manhã</th><th>Tarde</th><th>Noite</th></tr></thead><tbody><tr class="day-row"><td colspan="5">12/10/2026 • Segunda-feira</td></tr><tr><td>12/10</td><td>Gesa</td><td>12 Tamp</td><td>12 Tamp</td><td>12 Tamp</td></tr><tr><td>12/10</td><td>Biel</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr><td>12/10</td><td>Eduardo</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr class="day-row"><td colspan="5">13/10/2026 • Terça-feira</td></tr><tr><td>13/10</td><td>Gesa</td><td>12 Tamp</td><td>12 Tamp</td><td>12 Tamp</td></tr><tr><td>13/10</td><td>Biel</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr><td>13/10</td><td>Eduardo</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr class="day-row"><td colspan="5">14/10/2026 • Quarta-feira</td></tr><tr><td>14/10</td><td>Gesa</td><td>12 Tamp</td><td>12 Tamp</td><td>12 Tamp</td></tr><tr><td>14/10</td><td>Biel</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr><td>14/10</td><td>Eduardo</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr class="day-row"><td colspan="5">15/10/2026 • Quinta-feira</td></tr><tr><td>15/10</td><td>Gesa</td><td>12 Tamp</td><td>12 Tamp</td><td>12 Tamp</td></tr><tr><td>15/10</td><td>Biel</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr><td>15/10</td><td>Eduardo</td><td>30 Env</td><td>30 Env</td><td>12 Tamp</td></tr><tr class="day-row"><td colspan="5">16/10/2026 • Sexta-feira</td></tr><tr><td>16/10</td><td>Gesa</td><td>11 Tamp</td><td>FIB / Control</td><td>X</td></tr><tr><td>16/10</td><td>Biel</td><td>21 Env + 6 Tamp</td><td>FIB / Control</td><td>X</td></tr><tr><td>16/10</td><td>Eduardo</td><td>21 Env + 6 Tamp</td><td>FIB / Control</td><td>X</td></tr></tbody></table></div><div class="agenda-note"><strong>Semana 3.</strong> Programação transcrita da nova agenda enviada.</div></section>
+<section class="person-view" id="person-gesa"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Gesa</h3><p>Programação individual • Setembro/Outubro 2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div><div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 28/09/2026 → 02/10/2026</div><div class="person-day" data-date="2026-09-28" data-week="1"><div class="person-day-date">28/09/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div></div></div></div><div class="person-day" data-date="2026-09-29" data-week="1"><div class="person-day-date">29/09/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-09-30" data-week="1"><div class="person-day-date">30/09/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-01" data-week="1"><div class="person-day-date">01/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-02" data-week="1"><div class="person-day-date">02/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div><div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 05/10/2026 → 09/10/2026</div><div class="person-day" data-date="2026-10-05" data-week="2"><div class="person-day-date">05/10/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-06" data-week="2"><div class="person-day-date">06/10/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-07" data-week="2"><div class="person-day-date">07/10/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-08" data-week="2"><div class="person-day-date">08/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-09" data-week="2"><div class="person-day-date">09/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div><div class="week-person-card"><div class="week-person-title">📅 Semana 3 • 12/10/2026 → 16/10/2026</div><div class="person-day" data-date="2026-10-12" data-week="3"><div class="person-day-date">12/10/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-13" data-week="3"><div class="person-day-date">13/10/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-14" data-week="3"><div class="person-day-date">14/10/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-15" data-week="3"><div class="person-day-date">15/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">12 Tamp</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-16" data-week="3"><div class="person-day-date">16/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">11 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div></section>
+<section class="person-view" id="person-biel"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Biel</h3><p>Programação individual • Setembro/Outubro 2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div><div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 28/09/2026 → 02/10/2026</div><div class="person-day" data-date="2026-09-28" data-week="1"><div class="person-day-date">28/09/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div></div></div></div><div class="person-day" data-date="2026-09-29" data-week="1"><div class="person-day-date">29/09/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-09-30" data-week="1"><div class="person-day-date">30/09/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-01" data-week="1"><div class="person-day-date">01/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-02" data-week="1"><div class="person-day-date">02/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div><div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 05/10/2026 → 09/10/2026</div><div class="person-day" data-date="2026-10-05" data-week="2"><div class="person-day-date">05/10/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-06" data-week="2"><div class="person-day-date">06/10/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-07" data-week="2"><div class="person-day-date">07/10/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-08" data-week="2"><div class="person-day-date">08/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-09" data-week="2"><div class="person-day-date">09/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div><div class="week-person-card"><div class="week-person-title">📅 Semana 3 • 12/10/2026 → 16/10/2026</div><div class="person-day" data-date="2026-10-12" data-week="3"><div class="person-day-date">12/10/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-13" data-week="3"><div class="person-day-date">13/10/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-14" data-week="3"><div class="person-day-date">14/10/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-15" data-week="3"><div class="person-day-date">15/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-16" data-week="3"><div class="person-day-date">16/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">21 Env + 6 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div></section>
+<section class="person-view" id="person-eduardo"><div class="person-page-header"><div><div class="eyebrow">Agenda individual • CLOT</div><h3>👤 Eduardo</h3><p>Programação individual • Setembro/Outubro 2026</p></div><button class="back-button" onclick="hidePeople()">← Voltar</button></div><div class="week-person-card"><div class="week-person-title">📅 Semana 1 • 28/09/2026 → 02/10/2026</div><div class="person-day" data-date="2026-09-28" data-week="1"><div class="person-day-date">28/09/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">—</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">—</div></div></div></div><div class="person-day" data-date="2026-09-29" data-week="1"><div class="person-day-date">29/09/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">X</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">X</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-09-30" data-week="1"><div class="person-day-date">30/09/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">X</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-01" data-week="1"><div class="person-day-date">01/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-02" data-week="1"><div class="person-day-date">02/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div><div class="week-person-card"><div class="week-person-title">📅 Semana 2 • 05/10/2026 → 09/10/2026</div><div class="person-day" data-date="2026-10-05" data-week="2"><div class="person-day-date">05/10/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-06" data-week="2"><div class="person-day-date">06/10/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-07" data-week="2"><div class="person-day-date">07/10/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">8</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">7</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-08" data-week="2"><div class="person-day-date">08/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">700 Cxs</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">4200 Cxs</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div><div class="person-day" data-date="2026-10-09" data-week="2"><div class="person-day-date">09/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div><div class="week-person-card"><div class="week-person-title">📅 Semana 3 • 12/10/2026 → 16/10/2026</div><div class="person-day" data-date="2026-10-12" data-week="3"><div class="person-day-date">12/10/2026<br/>Segunda-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-13" data-week="3"><div class="person-day-date">13/10/2026<br/>Terça-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-14" data-week="3"><div class="person-day-date">14/10/2026<br/>Quarta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-15" data-week="3"><div class="person-day-date">15/10/2026<br/>Quinta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">30 Env</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">12 Tamp</div></div></div></div><div class="person-day" data-date="2026-10-16" data-week="3"><div class="person-day-date">16/10/2026<br/>Sexta-feira</div><div class="person-periods"><div class="period-item"><div class="period-label">☀️ Manhã</div><div class="period-task">21 Env + 6 Tamp</div></div><div class="period-item"><div class="period-label">🌤️ Tarde</div><div class="period-task">FIB / Control</div></div><div class="period-item"><div class="period-label">🌙 Noite</div><div class="period-task">X</div></div></div></div></div></section>
+
+
+<div class="section-title"><h3>Agenda por colaborador</h3><p>Consulte a programação individual</p></div><section class="team">
+<div class="person" onclick="showPerson('person-gesa')"><div class="avatar">GE</div><strong>Gesa</strong><span>Ver programação</span></div>
+<div class="person" onclick="showPerson('person-biel')"><div class="avatar">BI</div><strong>Biel</strong><span>Ver programação</span></div>
+<div class="person" onclick="showPerson('person-eduardo')"><div class="avatar">ED</div><strong>Eduardo</strong><span>Ver programação</span></div>
+
+
+</section>
+
+<div class="note"><strong>Objetivo:</strong> acompanhar a produção do período de 28/09/2026 a 16/10/2026 de forma simples e transparente, respeitando a programação da agenda enviada.</div></main>
+<footer>CLOT • Agenda Produtiva • V12 • Setembro/Outubro 2026 • Site informativo • Atualização automática</footer>
+<script>
+function showPerson(id) {
+  document.querySelectorAll('.agenda-view,.person-view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('main > section:not(.agenda-view):not(.person-view), main > .section-title, main > .team, main > .note').forEach(el => {
+    el.dataset.hiddenByAgenda = '1';
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function hidePeople() {
+  document.querySelectorAll('.person-view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('[data-hidden-by-agenda]').forEach(el => {
+    el.style.display = '';
+    delete el.dataset.hiddenByAgenda;
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showAgenda(id) {
+  document.querySelectorAll('.agenda-view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('main > section:not(.agenda-view), main > .section-title, main > .team, main > .note').forEach(el => {
+    el.dataset.hiddenByAgenda = '1';
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function hideAgendas() {
+  document.querySelectorAll('.agenda-view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('[data-hidden-by-agenda]').forEach(el => {
+    el.style.display = '';
+    delete el.dataset.hiddenByAgenda;
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Atualização automática: não usar cache HTTP para o Service Worker.
+if ('serviceWorker' in navigator) {
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading) return;
+    reloading = true;
+    window.location.reload();
+  });
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+    .then(reg => reg.update())
+    .catch(() => {});
+}
+</script></body>
+
+
+</html>
